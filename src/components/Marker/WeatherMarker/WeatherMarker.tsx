@@ -19,35 +19,32 @@ const markerIcon = new DivIcon({
 });
 
 export const WeatherMarker = () => {
-  const [position, setPosition] = useState<LatLong | null>(null);
-  const { data, isLoading } = useWeatherQuery(position as LatLong);
   const { userPosition } = useGeoLocation();
   const { showToast } = useToast();
+  const [position, setPosition] = useState<LatLong | null>(null);
   const [clicked, setClicked] = useState(false);
+
+  const { data, isLoading } = useWeatherQuery(position as LatLong, clicked);
+
   const closePopup = () => {
     setClicked(false);
     setPosition(null);
   };
 
-  useEffect(() => {
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closePopup();
-      }
-    });
+  const cloSePopupWithEscape = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      closePopup();
+    }
+  };
 
-    return () =>
-      window.removeEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          closePopup();
-        }
-      });
+  useEffect(() => {
+    window.addEventListener("keydown", cloSePopupWithEscape);
+    return () => window.removeEventListener("keydown", cloSePopupWithEscape);
   }, []);
 
   useMapEvent("click", async (e) => {
     const { lat, lng } = e.latlng;
     if (!clicked) {
-      setClicked(true);
       setPosition([lat, lng]);
     } else {
       closePopup();
@@ -57,8 +54,16 @@ export const WeatherMarker = () => {
   return (
     <>
       {position && (
-        <Marker icon={markerIcon} position={[...position]}>
-          <Popup>
+        <Marker
+          eventHandlers={{
+            click: () => {
+              setClicked(true);
+            },
+          }}
+          icon={markerIcon}
+          position={[...position]}
+        >
+          <Popup closeOnEscapeKey={true}>
             {isLoading ? (
               <Box
                 sx={{

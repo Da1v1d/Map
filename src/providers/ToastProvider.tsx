@@ -15,7 +15,7 @@ export const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      {toast.open && <div>toast opened</div>}
+      {toast.open && <div>{toast.message}</div>}
     </ToastContext.Provider>
   );
 };
