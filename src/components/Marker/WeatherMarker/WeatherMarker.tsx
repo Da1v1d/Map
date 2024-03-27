@@ -63,7 +63,7 @@ export const WeatherMarker = () => {
           icon={markerIcon}
           position={[...position]}
         >
-          <Popup closeOnEscapeKey={true}>
+          <Popup>
             {isLoading ? (
               <Box
                 sx={{

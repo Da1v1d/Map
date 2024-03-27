@@ -1,21 +1,28 @@
+import { ToastComponent } from "components/Toast/Toast";
 import { ToastContext } from "context/ToastContenxt";
 import { FC, PropsWithChildren, useContext, useState } from "react";
-import { Toast, ToastType } from "types/toast.types";
+import {
+  Toast,
+  ToastType,
+  showToastType,
+} from "types/toast.types";
 
 export const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [toast, setToast] = useState({
+  const [toast, setToast] = useState<Toast>({
     type: "",
     open: false,
     message: "",
   });
-  const showToast = (type: ToastType, message: string): void => {
+  
+  const showToast: showToastType = (type: ToastType, message: string) => {
     setToast({ type, open: true, message });
+    return 1;
   };
 
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      {toast.open && <div>{toast.message}</div>}
+      <ToastComponent setToast={setToast} {...toast} />
     </ToastContext.Provider>
   );
 };
