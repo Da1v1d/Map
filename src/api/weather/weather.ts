@@ -1,9 +1,8 @@
-import { LatLong } from "../../types/map.types";
-import { CurrentWeatherInfo } from "../../types/weather.types";
+import { CurrentWeatherInfo } from "types/weather.types";
 
 export const getCurrentWeatherInfo: (
-  lat: LatLong[0],
-  long: LatLong[1]
+  lat: number,
+  long: number
 ) => Promise<CurrentWeatherInfo> = async (lat, long) => {
   if (lat && long) {
     const fetchedData = await fetch(

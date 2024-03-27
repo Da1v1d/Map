@@ -1,52 +1,62 @@
 import { Marker, Popup, useMapEvent } from "react-leaflet";
 import { useEffect, useState } from "react";
-import { Icon } from "leaflet";
-import marker from "../../../assets/icons/marker.png";
+import { Icon, DivIcon } from "leaflet";
+import marker from "assets/icons/marker.png";
 
 import { Box, CircularProgress, Typography } from "@mui/material";
 import ThunderstormRoundedIcon from "@mui/icons-material/ThunderstormRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
 import ModeNightRoundedIcon from "@mui/icons-material/ModeNightRounded";
-import "./style.css";
-import { useCurrentWeather } from "hooks/useCurrentWeather";
+import { useWeatherQuery } from "hooks/useWeatherQuery";
 import { LatLong } from "types/map.types";
+import { useGeoLocation } from "hooks/useGeoLocation";
+import { useToast } from "providers/ToastProvider";
+import { showHour } from "utils/date";
 
-const markerIcon = new Icon({
-  iconUrl: marker,
-  iconSize: [35, 40],
-  iconAnchor: [17, 30],
+const markerIcon = new DivIcon({
+  iconSize: [24, 24],
+  iconAnchor: [11, 25],
 });
 
 export const WeatherMarker = () => {
   const [position, setPosition] = useState<LatLong | null>(null);
-  const { data, isLoading } = useCurrentWeather(position as LatLong);
-  // const [data, setData] = useState<CurrentWeatherInfo | null>(null);
+  const { data, isLoading } = useWeatherQuery(position as LatLong);
+  const { userPosition } = useGeoLocation();
+  const { showToast } = useToast();
+  const [clicked, setClicked] = useState(false);
+  const closePopup = () => {
+    setClicked(false);
+    setPosition(null);
+  };
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        // setData(null);
-        setPosition(null);
+        closePopup();
       }
     });
 
     return () =>
       window.removeEventListener("keydown", (e) => {
         if (e.key === "Escape") {
-          // setData(null);
-          setPosition(null);
+          closePopup();
         }
       });
   }, []);
 
   useMapEvent("click", async (e) => {
     const { lat, lng } = e.latlng;
-    setPosition([lat, lng]);
+    if (!clicked) {
+      setClicked(true);
+      setPosition([lat, lng]);
+    } else {
+      closePopup();
+    }
   });
 
   return (
     <>
-      {position?.length && (
+      {position && (
         <Marker icon={markerIcon} position={[...position]}>
           <Popup>
             {isLoading ? (
@@ -81,7 +91,7 @@ export const WeatherMarker = () => {
                     {data.current_units?.temperature_2m}
                   </Typography>
                   <Typography variant="overline" fontWeight="700">
-                    {new Date().getHours() + ":" + new Date().getMinutes()}
+                    {showHour()}
                   </Typography>
                 </Box>
               )

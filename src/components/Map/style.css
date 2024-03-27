@@ -7,3 +7,39 @@
 .leaflet-right {
   display: none;
 }
+
+.leaflet-popup-content-wrapper {
+  height: 260px;
+  width: 220px;
+  padding: 20px;
+}
+
+.leaflet-popup {
+  bottom: 12px !important;
+}
+
+.leaflet-popup-content {
+  width: 100% !important;
+  height: 100%;
+  margin: 0;
+}
+
+.leaflet-popup-close-button {
+  display: none;
+}
+
+.leaflet-div-icon {
+  background-color: white;
+  border: 5px solid black;
+  border-radius: 50%;
+  animation: marker 0.5s linear;
+}
+
+@keyframes marker {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
