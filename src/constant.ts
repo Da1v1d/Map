@@ -1,3 +1,5 @@
 export const QUERY_KEYS = {
-  weather: "weather",
-};
+  WEATHER: "weather",
+  TIMEZONE: "timezone",
+  POSITION_INFO: "position-info",
+} as const;

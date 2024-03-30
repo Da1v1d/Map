@@ -2,7 +2,7 @@ import { useToast } from "providers/ToastProvider";
 import { useEffect, useState } from "react";
 import { LatLong } from "types/map.types";
 
-export const useGeoLocation = () => {
+export const useCurrentPosition = () => {
   const [userPosition, setUserPosition] = useState<LatLong | null>();
   const [userSpeed, setUserSpeed] = useState(0);
   const { showToast } = useToast();
@@ -10,15 +10,20 @@ export const useGeoLocation = () => {
   useEffect(() => {
     window.navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const { latitude, longitude } = pos.coords;
+        const {
+          coords: { latitude, longitude },
+        } = pos;
         setUserPosition([latitude, longitude]);
       },
       (error) => showToast("error", error.message)
     );
 
     const speed = window.navigator.geolocation.watchPosition((pos) => {
-      setUserSpeed(pos.coords.speed as number);
-      setUserPosition([pos.coords.latitude, pos.coords.longitude]);
+      const {
+        coords: { speed, latitude, longitude },
+      } = pos;
+      setUserSpeed(speed as number);
+      setUserPosition([latitude, longitude]);
     });
     return () => {
       window.navigator.geolocation.clearWatch(speed);
