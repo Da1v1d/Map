@@ -1,8 +1,8 @@
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { FC } from "react";
 import { Popup } from "react-leaflet";
 import { CurrentWeatherInfo } from "types/weather.types";
-import { PopupBackdrop, PopupContent } from "./styled";
+import { PopupBackdrop, PopupContent, PopupTypography } from "./styled";
 import { showTemperature } from "utils/temperature";
 import { convertToHours } from "utils/date";
 import ThunderstormRoundedIcon from "@mui/icons-material/ThunderstormRounded";
@@ -21,6 +21,7 @@ export const WeatherPopup: FC<WeatherPopup> = ({ data, isLoading }) => {
         <PopupBackdrop open={isLoading}>
           <CircularProgress size={64} />
         </PopupBackdrop>
+        // ? beter way of handling beside data[0].blablabla
         {data?.length && (
           <PopupContent>
             {data[0].current.rain ? (
@@ -30,12 +31,12 @@ export const WeatherPopup: FC<WeatherPopup> = ({ data, isLoading }) => {
             ) : (
               <ModeNightRoundedIcon sx={{ fontSize: "112px" }} />
             )}
-            <Typography variant="h4" fontWeight="700">
+            <PopupTypography variant="h4">
               {showTemperature(data[0])}
-            </Typography>
-            <Typography variant="h5" fontWeight="700">
+            </PopupTypography>
+            <PopupTypography variant="h5">
               {convertToHours(data[1].response.ctime)}
-            </Typography>
+            </PopupTypography>
           </PopupContent>
         )}
       </>
