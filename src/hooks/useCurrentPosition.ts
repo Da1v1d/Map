@@ -1,24 +1,26 @@
-import { useToast } from "providers/ToastProvider";
 import { useEffect, useState } from "react";
+
 import { LatLong } from "types/map.types";
+
+import { useToastContext } from "providers/ToastProvider";
 
 export const useCurrentPosition = () => {
   const [userPosition, setUserPosition] = useState<LatLong | null>();
   const [userSpeed, setUserSpeed] = useState(0);
-  const { showToast } = useToast();
+  const { showToast } = useToastContext();
 
   useEffect(() => {
     window.navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      pos => {
         const {
           coords: { latitude, longitude },
         } = pos;
         setUserPosition([latitude, longitude]);
       },
-      (error) => showToast("error", error.message)
+      error => showToast("error", error.message),
     );
 
-    const speed = window.navigator.geolocation.watchPosition((pos) => {
+    const speed = window.navigator.geolocation.watchPosition(pos => {
       const {
         coords: { speed, latitude, longitude },
       } = pos;

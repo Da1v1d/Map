@@ -1,8 +1,9 @@
 import { MapContainer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import "./style.css";
+
 import { WeatherMarker } from "../Marker/WeatherMarker/WeatherMarker";
 import { Tyle } from "./Tyle";
+import "./style.css";
+import "leaflet/dist/leaflet.css";
 
 export const Map = () => {
   return (

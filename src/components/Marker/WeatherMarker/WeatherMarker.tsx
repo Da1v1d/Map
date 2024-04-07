@@ -1,10 +1,12 @@
-import { Marker, useMapEvent } from "react-leaflet";
-import { useEffect, useState } from "react";
 import { DivIcon } from "leaflet";
+import { useEffect, useState } from "react";
+import { Marker, useMapEvent } from "react-leaflet";
+
+import { WeatherPopup } from "components/Popup/WeatherPopup/WeatherPopup";
 
 import { usePositionInfoQuery } from "hooks/usePositionInfoQuery";
+
 import { LatLong } from "types/map.types";
-import { WeatherPopup } from "components/Popup/WeatherPopup/WeatherPopup";
 
 const markerIcon = new DivIcon({
   iconSize: [24, 24],
@@ -15,7 +17,7 @@ export const WeatherMarker = () => {
   const [position, setPosition] = useState<LatLong | null>(null);
   const [clicked, setClicked] = useState(false);
 
-  const { data, isLoading } = usePositionInfoQuery(position as LatLong, clicked);
+  const { data, isLoading } = usePositionInfoQuery(position!, clicked);
 
   const closePopup = () => {
     setClicked(false);
@@ -30,11 +32,12 @@ export const WeatherMarker = () => {
 
   useEffect(() => {
     // ! Got A problem somethimes eventlistener removed
+    // Todo need to work in it
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, []);
 
-  useMapEvent("click", async (e) => {
+  useMapEvent("click", async e => {
     const { lat, lng } = e.latlng;
     if (!clicked) {
       setPosition([lat, lng]);

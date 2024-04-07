@@ -5,8 +5,9 @@ export interface Toast {
   open: boolean;
   message: string;
 }
+
 export type showToastType = (type: ToastType, message: string) => void;
 
 export type ToastContextType = {
-  showToast: (type: ToastType, message: string) => void;
+  showToast: showToastType;
 };

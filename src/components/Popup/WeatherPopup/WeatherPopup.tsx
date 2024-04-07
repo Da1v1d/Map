@@ -1,19 +1,24 @@
-import { CircularProgress } from "@mui/material";
 import { FC } from "react";
 import { Popup } from "react-leaflet";
-import { CurrentWeatherInfo } from "types/weather.types";
-import { PopupBackdrop, PopupContent, PopupTypography } from "./styled";
-import { showTemperature } from "utils/temperature";
+
 import { convertToHours } from "utils/date";
+import { showTemperature } from "utils/temperature";
+
+import { CurrentWeatherInfo } from "types/weather.types";
+
+import { PopupBackdrop, PopupContent, PopupTypography } from "./styled";
+
+import ModeNightRoundedIcon from "@mui/icons-material/ModeNightRounded";
 import ThunderstormRoundedIcon from "@mui/icons-material/ThunderstormRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
-import ModeNightRoundedIcon from "@mui/icons-material/ModeNightRounded";
+import { CircularProgress } from "@mui/material";
 
 type WeatherPopup = {
   data: any | CurrentWeatherInfo | undefined;
   isLoading: boolean;
 };
 
+// ? beter way of handling beside data[0].blablabla
 export const WeatherPopup: FC<WeatherPopup> = ({ data, isLoading }) => {
   return (
     <Popup>
@@ -21,7 +26,6 @@ export const WeatherPopup: FC<WeatherPopup> = ({ data, isLoading }) => {
         <PopupBackdrop open={isLoading}>
           <CircularProgress size={64} />
         </PopupBackdrop>
-        // ? beter way of handling beside data[0].blablabla
         {data?.length && (
           <PopupContent>
             {data[0].current.rain ? (
@@ -34,8 +38,9 @@ export const WeatherPopup: FC<WeatherPopup> = ({ data, isLoading }) => {
             <PopupTypography variant="h4">
               {showTemperature(data[0])}
             </PopupTypography>
+
             <PopupTypography variant="h5">
-              {convertToHours(data[1].response.ctime)}
+              {!!data[1].response && convertToHours(data[1]?.response?.ctime)}
             </PopupTypography>
           </PopupContent>
         )}

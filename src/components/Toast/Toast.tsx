@@ -1,16 +1,20 @@
-import { Alert, Snackbar } from "@mui/material";
 import { FC } from "react";
+
 import { Toast, ToastType } from "types/toast.types";
 
+import { Alert, Snackbar } from "@mui/material";
+
 export const ToastComponent: FC<
-  Toast & { setToast: (props: Toast) => void }
-> = ({ setToast, open, type, message }) => {
+  Toast & {
+    clearToast: () => void;
+  }
+> = ({ clearToast, open, type, message }) => {
   return (
     <Snackbar open={open}>
       <Alert
         severity={type as ToastType}
         variant="filled"
-        onClose={() => setToast({ type: "", open: false, message: "" })}
+        onClose={clearToast}
         sx={{
           width: "100%",
         }}
