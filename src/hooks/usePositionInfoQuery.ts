@@ -7,8 +7,6 @@ import { LatLong } from "../types/map.types";
 import { useQuery } from "@tanstack/react-query";
 
 export const usePositionInfoQuery = (position: LatLong, clicked: boolean) => {
-  const [lat, long] = position;
-
   return useQuery({
     // Todo no need 3 keys
     queryKey: [
@@ -18,6 +16,8 @@ export const usePositionInfoQuery = (position: LatLong, clicked: boolean) => {
       position,
     ],
     queryFn: () => {
+      const [lat, long] = position;
+
       return Promise.all([
         WeatherApi.getCurrentWeatherInfo(lat, long),
         TimeApi.getCurrentTime(lat, long),

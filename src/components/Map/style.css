@@ -2,11 +2,11 @@
   height: 100%;
   width: 100%;
 }
-
+/* 
 .leaflet-bottom,
 .leaflet-right {
   display: none;
-}
+} */
 
 .leaflet-popup-content-wrapper {
   height: 260px;

@@ -9,7 +9,7 @@ import { usePositionInfoQuery } from "hooks/usePositionInfoQuery";
 import { LatLong } from "types/map.types";
 
 const markerIcon = new DivIcon({
-  iconSize: [24, 24],
+  iconSize: [22, 22],
   iconAnchor: [11, 25],
 });
 
@@ -31,8 +31,8 @@ export const WeatherMarker = () => {
   };
 
   useEffect(() => {
-    // ! Got A problem somethimes eventlistener removed
-    // Todo need to work in it
+    // ! Got A problem eventlistener removed
+    // Todo need to fix it
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, []);
@@ -47,20 +47,18 @@ export const WeatherMarker = () => {
   });
 
   return (
-    <>
-      {position && (
-        <Marker
-          eventHandlers={{
-            click: () => {
-              setClicked(true);
-            },
-          }}
-          icon={markerIcon}
-          position={[...position]}
-        >
-          <WeatherPopup data={data} isLoading={isLoading} />
-        </Marker>
-      )}
-    </>
+    position && (
+      <Marker
+        eventHandlers={{
+          click: () => {
+            setClicked(true);
+          },
+        }}
+        icon={markerIcon}
+        position={[...position]}
+      >
+        <WeatherPopup data={data} isLoading={isLoading} />
+      </Marker>
+    )
   );
 };
