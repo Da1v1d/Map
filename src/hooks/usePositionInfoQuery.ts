@@ -1,8 +1,8 @@
 import { QUERY_KEYS } from "constant";
 
-import { getCurrentTimeZone } from "api/timezone";
+import { TimeApi } from "api/time";
+import { WeatherApi } from "api/weather";
 
-import { getCurrentWeatherInfo } from "../api/weather/weather";
 import { LatLong } from "../types/map.types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -10,7 +10,7 @@ export const usePositionInfoQuery = (position: LatLong, clicked: boolean) => {
   const [lat, long] = position;
 
   return useQuery({
-    // ? Why 3 key do you need it Davo :)
+    // Todo no need 3 keys
     queryKey: [
       QUERY_KEYS.TIMEZONE,
       QUERY_KEYS.WEATHER,
@@ -19,8 +19,8 @@ export const usePositionInfoQuery = (position: LatLong, clicked: boolean) => {
     ],
     queryFn: () => {
       return Promise.all([
-        getCurrentWeatherInfo(lat, long),
-        getCurrentTimeZone(lat, long),
+        WeatherApi.getCurrentWeatherInfo(lat, long),
+        TimeApi.getCurrentTime(lat, long),
       ]);
     },
     enabled: !!position && clicked,
